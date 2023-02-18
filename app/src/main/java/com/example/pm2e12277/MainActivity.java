@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     SearchView TxtBuscar;
     RecyclerView listaContactos;
     ArrayList<Contactos> listaArrayContactos;
-    FloatingActionButton btnnuevo;
+    FloatingActionButton btnnuevo, btncompartir;
+
     ListaContactosAdapter adapter;
 
     @Override
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_main);
 
         TxtBuscar = findViewById(R.id.TxtBuscar);
+        btncompartir = findViewById(R.id.btncompartir);
         listaContactos = findViewById(R.id.listaContactos);
         btnnuevo = findViewById(R.id.btnnuevo);
         listaContactos.setLayoutManager(new LinearLayoutManager(this));
@@ -42,6 +45,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         listaArrayContactos = new ArrayList<>();
         adapter = new ListaContactosAdapter(dbContactos.mostrarContactos());
         listaContactos.setAdapter(adapter);
+
+        btncompartir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+
+            }
+        });
 
         btnnuevo.setOnClickListener(new View.OnClickListener() {
             @Override
